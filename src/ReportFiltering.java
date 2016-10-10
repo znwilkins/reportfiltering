@@ -39,9 +39,9 @@ import com.opencsv.CSVReader;
 public class ReportFiltering{
 	
 	/** This field contains the location of the report files. */
-	protected static String loc = "./reports/";
+	protected final static String LOC = "./reports/";
 	/** This field stores an initial array size for the report list. */
-	private static int arrSize = 900;
+	private final static int ARR_SIZE = 900;
 	
 	/**
 	 * The Report class is a class to
@@ -206,8 +206,7 @@ public class ReportFiltering{
 		 * is beginning, or if an attribute is being read.
 		 */
 		public void startElement(String uri, String localName,
-									String qName, Attributes attributes)
-											throws SAXException
+						String qName, Attributes attributes) throws SAXException
 		{
 			// Reset the holders
 			tempInt = 0;
@@ -243,7 +242,7 @@ public class ReportFiltering{
 		 */
 		public void characters(char ch[], int start, int length)
 	    		throws SAXException
-	    {
+		{
 			String word = new String(ch, start, length);
 			if(intFlag){
 				tempInt = Integer.valueOf(word);
@@ -262,7 +261,7 @@ public class ReportFiltering{
 				tempString = word;
 				stringFlag = false;
 			}
-	    }
+		}
 		
 		/**
 		 * This overridden method looks for XML
@@ -302,7 +301,7 @@ public class ReportFiltering{
 	 * @param args arguments, not used
 	 */
 	public static void main(String[] args){
-		ArrayList<Report> reports = new ArrayList<>(arrSize);
+		ArrayList<Report> reports = new ArrayList<>(ARR_SIZE);
 		
 		try{
 			reports.addAll(Arrays.asList(parseJSON()));
@@ -335,9 +334,8 @@ public class ReportFiltering{
 	 * is not found by the scanner
 	 */
 	private static Report[] parseJSON() throws Exception{
-		//TODO Need to do a relative file location
 		Gson gson = new Gson();
-		File file = new File(loc + "reports.json");
+		File file = new File(LOC + "reports.json");
 		StringBuilder sb = new StringBuilder();
 		Scanner input = new Scanner(file);
 		
@@ -357,7 +355,7 @@ public class ReportFiltering{
 	 * cannot read the file, or if the date cannot be parsed
 	 */
 	private static ArrayList<Report> parseCSV() throws Exception{
-	     CSVReader reader = new CSVReader(new FileReader(loc + "reports.csv"));
+	     CSVReader reader = new CSVReader(new FileReader(LOC + "reports.csv"));
 	     List<String[]> csvEntries = reader.readAll();
 	     reader.close();
 	     
@@ -412,7 +410,7 @@ public class ReportFiltering{
 		SAXParserFactory factory = SAXParserFactory.newInstance();
 		SAXParser parser = factory.newSAXParser();
 		XMLHandler handler = new XMLHandler();
-		File file = new File(loc + "reports.xml");
+		File file = new File(LOC + "reports.xml");
 
 		parser.parse(file, handler);
 		
